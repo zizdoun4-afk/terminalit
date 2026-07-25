@@ -1,0 +1,63 @@
+com.terminalit.app-ui-geometry-release-0 C:\Users\dounga222\.gradle\caches\transforms-4\01a42be1281a7e14fdd5c8292334eca4\transformed\ui-geometry-release\res
+com.terminalit.app-foundation-layout-release-1 C:\Users\dounga222\.gradle\caches\transforms-4\04eee6563ecb820ab44fc94bbccbd876\transformed\foundation-layout-release\res
+com.terminalit.app-activity-compose-1.8.2-2 C:\Users\dounga222\.gradle\caches\transforms-4\0b87ab651a3237e24583f444fe35e356\transformed\activity-compose-1.8.2\res
+com.terminalit.app-ui-tooling-data-release-3 C:\Users\dounga222\.gradle\caches\transforms-4\1331d6b0791fc9b2d4dc3835d9f5117f\transformed\ui-tooling-data-release\res
+com.terminalit.app-biometric-1.2.0-alpha05-4 C:\Users\dounga222\.gradle\caches\transforms-4\1335e750a14b2b0a44edc8ed47375e17\transformed\biometric-1.2.0-alpha05\res
+com.terminalit.app-lifecycle-service-2.7.0-5 C:\Users\dounga222\.gradle\caches\transforms-4\1658fad11e05bd0a5605baf3235f67c5\transformed\lifecycle-service-2.7.0\res
+com.terminalit.app-hilt-navigation-1.1.0-6 C:\Users\dounga222\.gradle\caches\transforms-4\1670956e5d2b3b9da1b43b4ac27897ba\transformed\hilt-navigation-1.1.0\res
+com.terminalit.app-lifecycle-viewmodel-2.7.0-7 C:\Users\dounga222\.gradle\caches\transforms-4\1e3688349d0ca4dcd78731f2ff0f8f4d\transformed\lifecycle-viewmodel-2.7.0\res
+com.terminalit.app-navigation-compose-2.7.7-8 C:\Users\dounga222\.gradle\caches\transforms-4\20a3127d76275f584016a9a0c7cb9d45\transformed\navigation-compose-2.7.7\res
+com.terminalit.app-lifecycle-viewmodel-ktx-2.7.0-9 C:\Users\dounga222\.gradle\caches\transforms-4\23b93e13662fa84e470688b50a721671\transformed\lifecycle-viewmodel-ktx-2.7.0\res
+com.terminalit.app-core-1.12.0-10 C:\Users\dounga222\.gradle\caches\transforms-4\2c570d1fad298927fd8fe3cc67fcbf89\transformed\core-1.12.0\res
+com.terminalit.app-navigation-runtime-2.7.7-11 C:\Users\dounga222\.gradle\caches\transforms-4\2edd260e5b6a106aa88b954b97a38cc1\transformed\navigation-runtime-2.7.7\res
+com.terminalit.app-ui-util-release-12 C:\Users\dounga222\.gradle\caches\transforms-4\33b24abc8f1f5194b110429e9bbded09\transformed\ui-util-release\res
+com.terminalit.app-customview-poolingcontainer-1.0.0-13 C:\Users\dounga222\.gradle\caches\transforms-4\383e1a6b74adb4450e1cfa71c7470f33\transformed\customview-poolingcontainer-1.0.0\res
+com.terminalit.app-lifecycle-livedata-core-ktx-2.7.0-14 C:\Users\dounga222\.gradle\caches\transforms-4\3cb2d539d93e7accb6255a9189491f83\transformed\lifecycle-livedata-core-ktx-2.7.0\res
+com.terminalit.app-activity-ktx-1.8.2-15 C:\Users\dounga222\.gradle\caches\transforms-4\415d905da65fec22f6bcb4e4439d72a7\transformed\activity-ktx-1.8.2\res
+com.terminalit.app-hilt-navigation-compose-1.1.0-16 C:\Users\dounga222\.gradle\caches\transforms-4\47572df767f0698d9939ce2011ff7a8a\transformed\hilt-navigation-compose-1.1.0\res
+com.terminalit.app-navigation-common-2.7.7-17 C:\Users\dounga222\.gradle\caches\transforms-4\50a58e3830852a874d3c50f4f9ed4989\transformed\navigation-common-2.7.7\res
+com.terminalit.app-ui-tooling-release-18 C:\Users\dounga222\.gradle\caches\transforms-4\52b0ac2bc0e7d8d47d1192f05143820d\transformed\ui-tooling-release\res
+com.terminalit.app-appcompat-1.2.0-19 C:\Users\dounga222\.gradle\caches\transforms-4\54b86287bc837b884e7ed00a5ebe37d7\transformed\appcompat-1.2.0\res
+com.terminalit.app-appcompat-resources-1.2.0-20 C:\Users\dounga222\.gradle\caches\transforms-4\676c77a6429be8004f525e194dccaa70\transformed\appcompat-resources-1.2.0\res
+com.terminalit.app-ui-text-release-21 C:\Users\dounga222\.gradle\caches\transforms-4\696f547400161795517638d643b878e7\transformed\ui-text-release\res
+com.terminalit.app-foundation-release-22 C:\Users\dounga222\.gradle\caches\transforms-4\6e377038b31c60653ffd7d993d7e2083\transformed\foundation-release\res
+com.terminalit.app-savedstate-1.2.1-23 C:\Users\dounga222\.gradle\caches\transforms-4\7c3b26de57a8fdb1f04fa72a7c12924f\transformed\savedstate-1.2.1\res
+com.terminalit.app-material-icons-core-release-24 C:\Users\dounga222\.gradle\caches\transforms-4\8275e2dbc2e94a72ee91c962d97ea22f\transformed\material-icons-core-release\res
+com.terminalit.app-runtime-saveable-release-25 C:\Users\dounga222\.gradle\caches\transforms-4\8750014a4fdf1d6221b7bfe816a44d96\transformed\runtime-saveable-release\res
+com.terminalit.app-material3-release-26 C:\Users\dounga222\.gradle\caches\transforms-4\89796d1e313a80b603ac04b884ff7b5e\transformed\material3-release\res
+com.terminalit.app-lifecycle-livedata-2.7.0-27 C:\Users\dounga222\.gradle\caches\transforms-4\8c5b7ac517bc615de78b96f18b2b340c\transformed\lifecycle-livedata-2.7.0\res
+com.terminalit.app-animation-core-release-28 C:\Users\dounga222\.gradle\caches\transforms-4\8dd874276621a9e6c811b51072260654\transformed\animation-core-release\res
+com.terminalit.app-lifecycle-viewmodel-savedstate-2.7.0-29 C:\Users\dounga222\.gradle\caches\transforms-4\937d7076a8898d5c3526a41d2f4222af\transformed\lifecycle-viewmodel-savedstate-2.7.0\res
+com.terminalit.app-ui-release-30 C:\Users\dounga222\.gradle\caches\transforms-4\93847007fcc018673b66b67d2d3d58ee\transformed\ui-release\res
+com.terminalit.app-material-ripple-release-31 C:\Users\dounga222\.gradle\caches\transforms-4\99e2701fb64ed1d5aaed2c1f872cb20c\transformed\material-ripple-release\res
+com.terminalit.app-lifecycle-runtime-2.7.0-32 C:\Users\dounga222\.gradle\caches\transforms-4\9e0b747a0c9de5cf21f5be03f30964f8\transformed\lifecycle-runtime-2.7.0\res
+com.terminalit.app-emoji2-1.3.0-33 C:\Users\dounga222\.gradle\caches\transforms-4\a05bc78f2682c9d91efc9e64626e8a1e\transformed\emoji2-1.3.0\res
+com.terminalit.app-core-runtime-2.2.0-34 C:\Users\dounga222\.gradle\caches\transforms-4\a1eb0c42be433c67a5ff5a6823f49dd5\transformed\core-runtime-2.2.0\res
+com.terminalit.app-activity-1.8.2-35 C:\Users\dounga222\.gradle\caches\transforms-4\a529bc3dcba641b6fdb0cb25660e5481\transformed\activity-1.8.2\res
+com.terminalit.app-navigation-common-ktx-2.7.7-36 C:\Users\dounga222\.gradle\caches\transforms-4\a550e9987fb947ac29a445dadd8b0d4a\transformed\navigation-common-ktx-2.7.7\res
+com.terminalit.app-savedstate-ktx-1.2.1-37 C:\Users\dounga222\.gradle\caches\transforms-4\b23198274274d89b9d73fdf531e49c21\transformed\savedstate-ktx-1.2.1\res
+com.terminalit.app-core-ktx-1.12.0-38 C:\Users\dounga222\.gradle\caches\transforms-4\b302ef29c3a2090887f3aab1a98274c7\transformed\core-ktx-1.12.0\res
+com.terminalit.app-animation-release-39 C:\Users\dounga222\.gradle\caches\transforms-4\b7f228a6351bc9bc232348ade1a90dc7\transformed\animation-release\res
+com.terminalit.app-navigation-runtime-ktx-2.7.7-40 C:\Users\dounga222\.gradle\caches\transforms-4\ba4974cb6328c5a9b44b33997ac23e99\transformed\navigation-runtime-ktx-2.7.7\res
+com.terminalit.app-material-release-41 C:\Users\dounga222\.gradle\caches\transforms-4\bab8208e03b5c3c3df689c255383510f\transformed\material-release\res
+com.terminalit.app-ui-text-google-fonts-1.6.1-42 C:\Users\dounga222\.gradle\caches\transforms-4\c885360d57aa5585689d3ca8d836e258\transformed\ui-text-google-fonts-1.6.1\res
+com.terminalit.app-fragment-1.5.1-43 C:\Users\dounga222\.gradle\caches\transforms-4\cbd4a156e4425434744e05e29f2f2260\transformed\fragment-1.5.1\res
+com.terminalit.app-lifecycle-livedata-core-2.7.0-44 C:\Users\dounga222\.gradle\caches\transforms-4\d9297386c4c0d6ae892db387ea91308d\transformed\lifecycle-livedata-core-2.7.0\res
+com.terminalit.app-ui-tooling-preview-release-45 C:\Users\dounga222\.gradle\caches\transforms-4\d9badee63a689a4c4bde96f36774d8fd\transformed\ui-tooling-preview-release\res
+com.terminalit.app-runtime-release-46 C:\Users\dounga222\.gradle\caches\transforms-4\da91a3128a2ff262561b692a558211da\transformed\runtime-release\res
+com.terminalit.app-profileinstaller-1.3.0-47 C:\Users\dounga222\.gradle\caches\transforms-4\dbe0d84c542bf07e7a9469b2ec65c422\transformed\profileinstaller-1.3.0\res
+com.terminalit.app-lifecycle-runtime-ktx-2.7.0-48 C:\Users\dounga222\.gradle\caches\transforms-4\e0ebd868d6825ba8854818b9f9319cb0\transformed\lifecycle-runtime-ktx-2.7.0\res
+com.terminalit.app-startup-runtime-1.1.1-49 C:\Users\dounga222\.gradle\caches\transforms-4\e3de1ebc8f89a49ba1258c73f2ca8cf3\transformed\startup-runtime-1.1.1\res
+com.terminalit.app-lifecycle-viewmodel-compose-2.7.0-50 C:\Users\dounga222\.gradle\caches\transforms-4\e46e81f7f46f0baad7cff381f30092cb\transformed\lifecycle-viewmodel-compose-2.7.0\res
+com.terminalit.app-lifecycle-process-2.7.0-51 C:\Users\dounga222\.gradle\caches\transforms-4\e7d3ab84bb86c54fc22ff5f10b75cc0a\transformed\lifecycle-process-2.7.0\res
+com.terminalit.app-ui-graphics-release-52 C:\Users\dounga222\.gradle\caches\transforms-4\ec102a9f34481c7f644e213c64ff53c5\transformed\ui-graphics-release\res
+com.terminalit.app-material-icons-extended-release-53 C:\Users\dounga222\.gradle\caches\transforms-4\eca7d901b5dff74a29a2bf7c67900f42\transformed\material-icons-extended-release\res
+com.terminalit.app-ui-unit-release-54 C:\Users\dounga222\.gradle\caches\transforms-4\f2285aa18a1b7effe782f213b5ebef0b\transformed\ui-unit-release\res
+com.terminalit.app-annotation-experimental-1.4.0-55 C:\Users\dounga222\.gradle\caches\transforms-4\f546c0a0651db22f26a98cba955dc926\transformed\annotation-experimental-1.4.0\res
+com.terminalit.app-pngs-56 C:\Users\dounga222\Documents\Default Project\app\build\generated\res\pngs\debug
+com.terminalit.app-resValues-57 C:\Users\dounga222\Documents\Default Project\app\build\generated\res\resValues\debug
+com.terminalit.app-packageDebugResources-58 C:\Users\dounga222\Documents\Default Project\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.terminalit.app-packageDebugResources-59 C:\Users\dounga222\Documents\Default Project\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.terminalit.app-debug-60 C:\Users\dounga222\Documents\Default Project\app\build\intermediates\merged_res\debug\mergeDebugResources
+com.terminalit.app-debug-61 C:\Users\dounga222\Documents\Default Project\app\src\debug\res
+com.terminalit.app-main-62 C:\Users\dounga222\Documents\Default Project\app\src\main\res

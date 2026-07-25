@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">terminalit</string>
+    <string name="channel_terminal">SSH Terminal</string>
+    <string name="notification_session_active">SSH session active — tap to return</string>
+    <string name="connect">Connect</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="host_label">Host</string>
+    <string name="port_label">Port</string>
+    <string name="username_label">Username</string>
+    <string name="password_label">Password</string>
+    <string name="auth_type">Authentication</string>
+    <string name="private_key">Private Key</string>
+    <string name="password">Password</string>
+    <string name="connecting">Connecting…</string>
+    <string name="connection_failed">Connection failed</string>
+    <string name="host_key_verify">Host Key Verification</string>
+    <string name="host_key_fingerprint">Fingerprint: %s</string>
+    <string name="accept">Accept</string>
+    <string name="reject">Reject</string>
+    <string name="import_key">Import Key</string>
+    <string name="send">Send</string>
+    <string name="textarea_hint">Type or paste command…</string>
+</resources>
