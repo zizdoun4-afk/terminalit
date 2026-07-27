@@ -28,6 +28,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -47,6 +50,8 @@ fun ConnectionScreen(
     val sessionState by viewModel.sessionState.collectAsState()
     val context = androidx.compose.ui.platform.LocalContext.current
 
+    var keyWarning by remember { mutableStateOf<String?>(null) }
+
     val launcher = androidx.activity.compose.rememberLauncherForActivityResult(
         contract = androidx.activity.result.contract.ActivityResultContracts.GetContent()
     ) { uri: android.net.Uri? ->
@@ -55,7 +60,9 @@ fun ConnectionScreen(
                 val content = context.contentResolver.openInputStream(it)?.bufferedReader()?.use { reader -> reader.readText() }
                 if (content != null) {
                     if (!content.contains("BEGIN", ignoreCase = true) || !content.contains("PRIVATE KEY", ignoreCase = true)) {
-                        android.widget.Toast.makeText(context, "This doesn't look like a valid private key file", android.widget.Toast.LENGTH_LONG).show()
+                        keyWarning = "This doesn't look like a valid private key file"
+                    } else {
+                        keyWarning = null
                     }
                     viewModel.onPrivateKeyChanged(content)
                 }
@@ -228,13 +235,26 @@ fun ConnectionScreen(
             
             OutlinedTextField(
                 value = uiState.privateKeyData,
-                onValueChange = viewModel::onPrivateKeyChanged,
+                onValueChange = {
+                    keyWarning = null
+                    viewModel.onPrivateKeyChanged(it)
+                },
                 label = { Text("Paste Private Key (PEM) or Import") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),
                 maxLines = 5
             )
+
+            val currentWarning = keyWarning
+            if (currentWarning != null) {
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = currentWarning,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
 
             Spacer(Modifier.height(8.dp))
 

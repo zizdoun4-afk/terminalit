@@ -23,6 +23,19 @@ class ProfileListViewModel @Inject constructor(
             initialValue = emptyList()
         )
 
+    val isBiometricLockEnabled: StateFlow<Boolean> = profileStore.isBiometricLockEnabled
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = true
+        )
+
+    fun setBiometricLockEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            profileStore.setBiometricLockEnabled(enabled)
+        }
+    }
+
     fun deleteProfile(id: String) {
         viewModelScope.launch {
             profileStore.deleteProfile(id)

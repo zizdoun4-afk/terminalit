@@ -34,6 +34,7 @@ fun ProfileListScreen(
     viewModel: ProfileListViewModel = hiltViewModel()
 ) {
     val profiles by viewModel.profiles.collectAsState()
+    val isBiometricLockEnabled by viewModel.isBiometricLockEnabled.collectAsState()
 
     Scaffold(
         floatingActionButton = {
@@ -59,6 +60,38 @@ fun ProfileListScreen(
                 style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.primary
             )
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "Require unlock to open app",
+                            style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = "Authenticate via biometrics/PIN on launch and resume",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        )
+                    }
+                    Switch(
+                        checked = isBiometricLockEnabled,
+                        onCheckedChange = { viewModel.setBiometricLockEnabled(it) }
+                    )
+                }
+            }
+
             Spacer(modifier = Modifier.height(16.dp))
 
             if (profiles.isEmpty()) {
