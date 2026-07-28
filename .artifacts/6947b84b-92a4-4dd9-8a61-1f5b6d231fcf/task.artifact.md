@@ -1,4 +1,0 @@
-- [x] Upgrade Gradle to 8.7 in `gradle-wrapper.properties`
-- [x] Upgrade AGP to 8.5.2 in root `build.gradle.kts`
-- [x] Upgrade DataStore to 1.2.1 in `app/build.gradle.kts`
-- [x] Sync and verify build
