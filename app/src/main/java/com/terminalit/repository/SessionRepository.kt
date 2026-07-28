@@ -277,6 +277,11 @@ class SessionRepository @Inject constructor(
         _terminalSnapshot.value = terminalBuffer.snapshot()
     }
 
+    fun clearTerminalDisplay() {
+        terminalBuffer.clear()
+        _terminalSnapshot.value = terminalBuffer.snapshot()
+    }
+
     fun disconnect() {
         sessionJob?.cancel()
         sessionJob = null

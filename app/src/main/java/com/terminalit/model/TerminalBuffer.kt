@@ -339,6 +339,8 @@ class TerminalBuffer(
         resize(cols, rows)
     }
 
+    fun clear() = reset()
+
     private fun ensureLineExists() {
         while (_lines.size <= cursorRow) {
             _lines.add(emptyLine())

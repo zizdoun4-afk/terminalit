@@ -115,4 +115,8 @@ class TerminalViewModel @Inject constructor(
     fun resizeTerminal(cols: Int, rows: Int) {
         repository.resizeTerminal(cols, rows)
     }
+
+    fun clearTerminal() {
+        repository.clearTerminalDisplay()
+    }
 }

@@ -31,6 +31,7 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Keyboard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -204,7 +205,8 @@ fun TerminalScreen(
             },
             // ── Item 6: font size ± buttons ──────────────────────────────────
             onFontIncrease = { fontSizeSp = (fontSizeSp + 1f).coerceAtMost(24f) },
-            onFontDecrease = { fontSizeSp = (fontSizeSp - 1f).coerceAtLeast(8f) }
+            onFontDecrease = { fontSizeSp = (fontSizeSp - 1f).coerceAtLeast(8f) },
+            onClearTerminal = { viewModel.clearTerminal() }
         )
 
         // ── Item 4: BoxWithConstraints to get layout pixels for col/row calc ─
@@ -354,7 +356,8 @@ private fun TerminalTopBar(
     onToggleTextarea: () -> Unit,
     onShowKeyboard: () -> Unit,
     onFontIncrease: () -> Unit,
-    onFontDecrease: () -> Unit
+    onFontDecrease: () -> Unit,
+    onClearTerminal: () -> Unit
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -421,6 +424,18 @@ private fun TerminalTopBar(
                             fontSize = 13.sp,
                             color = Color(0xFF64B5F6)
                         )
+                    )
+                }
+
+                IconButton(
+                    onClick = onClearTerminal,
+                    modifier = Modifier.size(32.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.DeleteSweep,
+                        contentDescription = "Clear Terminal",
+                        tint = Color(0xFF64B5F6),
+                        modifier = Modifier.size(18.dp)
                     )
                 }
 
