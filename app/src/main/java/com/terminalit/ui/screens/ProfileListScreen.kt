@@ -109,7 +109,7 @@ fun ProfileListScreen(
                             onClick = {
                                 showMenu = false
                                 val intent = android.content.Intent(android.content.Intent.ACTION_SENDTO).apply {
-                                    data = android.net.Uri.parse("mailto:support@terminalit.com")
+                                    data = android.net.Uri.parse("mailto:zizdoun4@gmail.com")
                                     putExtra(android.content.Intent.EXTRA_SUBJECT, "TerminalIT Feedback")
                                 }
                                 try {
