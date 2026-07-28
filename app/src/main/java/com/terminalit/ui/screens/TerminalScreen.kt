@@ -63,6 +63,13 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.key.utf16CodePoint
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -142,6 +149,48 @@ fun TerminalScreen(
             .background(Color(0xFF0D0D11))
             .statusBarsPadding()
             .imePadding()
+            .onPreviewKeyEvent { keyEvent ->
+                if (keyEvent.type == KeyEventType.KeyDown) {
+                    when (keyEvent.key) {
+                        Key.Tab -> {
+                            viewModel.sendText("\t")
+                            true
+                        }
+                        Key.Escape -> {
+                            viewModel.sendText("\u001b")
+                            true
+                        }
+                        Key.DirectionUp -> {
+                            viewModel.sendText("\u001b[A")
+                            true
+                        }
+                        Key.DirectionDown -> {
+                            viewModel.sendText("\u001b[B")
+                            true
+                        }
+                        Key.DirectionLeft -> {
+                            viewModel.sendText("\u001b[D")
+                            true
+                        }
+                        Key.DirectionRight -> {
+                            viewModel.sendText("\u001b[C")
+                            true
+                        }
+                        else -> {
+                            if (keyEvent.isCtrlPressed) {
+                                val code = keyEvent.utf16CodePoint
+                                if (code in 'a'.code..'z'.code || code in 'A'.code..'Z'.code) {
+                                    val ctrlChar = (code.toChar().uppercaseChar().code - 64).toChar()
+                                    viewModel.sendText(ctrlChar.toString())
+                                    true
+                                } else false
+                            } else {
+                                false
+                            }
+                        }
+                    }
+                } else false
+            }
     ) {
         TerminalTopBar(
             sessionState = uiState.sessionState,

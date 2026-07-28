@@ -47,7 +47,12 @@ class SessionRepository @Inject constructor(
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val sshManager = SshManager(hostKeyStore)
     private val terminalBuffer = TerminalBuffer()
-    private val ansiParser = AnsiParser(terminalBuffer)
+    private val _bellFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val bellFlow: SharedFlow<Unit> = _bellFlow.asSharedFlow()
+
+    private val ansiParser = AnsiParser(terminalBuffer) {
+        _bellFlow.tryEmit(Unit)
+    }
 
     private var sessionJob: Job? = null
     private var inputJob: Job? = null

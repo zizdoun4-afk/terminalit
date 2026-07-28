@@ -4,7 +4,10 @@ import com.terminalit.model.TerminalBuffer
 import com.terminalit.model.TerminalStyle
 import kotlin.math.min
 
-class AnsiParser(private val buffer: TerminalBuffer) {
+class AnsiParser(
+    private val buffer: TerminalBuffer,
+    private val onBell: () -> Unit = {}
+) {
 
     private enum class State {
         GROUND, ESCAPE, CSI_ENTRY, CSI_PARAM, CSI_INTERMEDIATE, CSI_IGNORE,
@@ -91,7 +94,10 @@ class AnsiParser(private val buffer: TerminalBuffer) {
             c == 0x0D -> buffer.writeChar('\r')
             c == 0x08 -> buffer.writeChar('\b')
             c == 0x09 -> buffer.writeChar('\t')
-            c == 0x07 -> buffer.writeChar('\u0007')
+            c == 0x07 -> {
+                buffer.writeChar('\u0007')
+                onBell()
+            }
             c in 0x20..0x7E -> buffer.writeChar(c.toChar())
             c in 0x00..0x06 -> { /* control chars - ignore most */ }
             c in 0x0B..0x0C -> buffer.writeChar('\n')
