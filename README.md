@@ -69,7 +69,7 @@ TerminalIT leverages the modern Android development ecosystem:
 ### Building the Project
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/terminalit.git
+   git clone https://github.com/zizdoun4-afk/terminalit.git
    ```
 2. Open the project in **Android Studio**.
 3. Let Gradle sync and download all dependencies.
@@ -82,14 +82,29 @@ TerminalIT leverages the modern Android development ecosystem:
 
 ## 📸 Screenshots
 
-*(Add screenshots here once the repository is live! Recommended shots: The Profile List, The Terminal Screen with htop running, The Textarea Input Mode, and the Host Key Verification prompt.)*
+Here is a glimpse of TerminalIT in action:
+
+<table align="center">
+  <tr>
+    <td align="center"><b>My Servers (Home)</b></td>
+    <td align="center"><b>Server Configuration</b></td>
+    <td align="center"><b>Configure Extra Keys</b></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/home_screen.jpg" width="250" alt="Home Screen"/></td>
+    <td><img src="screenshots/server_config.jpg" width="250" alt="Server Configuration"/></td>
+    <td><img src="screenshots/extra_keys.jpg" width="250" alt="Configure Extra Keys"/></td>
+  </tr>
+</table>
+
+> **Note:** Create a `screenshots` folder at the root of the repository and add the `.jpg` images to display them above.
 
 ---
 
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!
-Feel free to check the [issues page](https://github.com/yourusername/terminalit/issues).
+Feel free to check the [issues page](https://github.com/zizdoun4-afk/terminalit/issues).
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
