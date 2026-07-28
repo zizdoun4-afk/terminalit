@@ -280,6 +280,7 @@ class SessionRepository @Inject constructor(
     fun clearTerminalDisplay() {
         terminalBuffer.clear()
         _terminalSnapshot.value = terminalBuffer.snapshot()
+        scope.launch { ioCommandChannel.send(IoCommand.Data(byteArrayOf(0x0C))) }
     }
 
     fun disconnect() {
