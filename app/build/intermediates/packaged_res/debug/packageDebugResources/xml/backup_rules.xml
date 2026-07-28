@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<full-backup-content>
-    <exclude domain="file" path="datastore/server_profiles.preferences_pb"/>
-    <exclude domain="file" path="datastore/host_keys.preferences_pb"/>
-</full-backup-content>
