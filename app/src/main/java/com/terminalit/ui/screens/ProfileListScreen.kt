@@ -103,6 +103,49 @@ fun ProfileListScreen(
                                 importLauncher.launch("application/json")
                             }
                         )
+                        HorizontalDivider()
+                        DropdownMenuItem(
+                            text = { Text("Contact Us") },
+                            onClick = {
+                                showMenu = false
+                                val intent = android.content.Intent(android.content.Intent.ACTION_SENDTO).apply {
+                                    data = android.net.Uri.parse("mailto:support@terminalit.com")
+                                    putExtra(android.content.Intent.EXTRA_SUBJECT, "TerminalIT Feedback")
+                                }
+                                try {
+                                    context.startActivity(intent)
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Share App") },
+                            onClick = {
+                                showMenu = false
+                                val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+                                    type = "text/plain"
+                                    putExtra(android.content.Intent.EXTRA_TEXT, "Try out TerminalIT, an amazing SSH client for Android! https://github.com/zizdoun4-afk/terminalit")
+                                }
+                                try {
+                                    context.startActivity(android.content.Intent.createChooser(intent, "Share TerminalIT"))
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Donate") },
+                            onClick = {
+                                showMenu = false
+                                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://paypal.me/YOUR_PAYPAL_LINK"))
+                                try {
+                                    context.startActivity(intent)
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
+                            }
+                        )
                     }
                 }
             )
