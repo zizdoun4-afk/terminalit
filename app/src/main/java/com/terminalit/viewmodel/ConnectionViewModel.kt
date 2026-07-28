@@ -22,11 +22,11 @@ import java.util.UUID
 import javax.inject.Inject
 
 data class ConnectionUiState(
-    val label: String = "Panel Server",
-    val host: String = "94.130.220.125",
-    val port: String = "46",
-    val username: String = "panel",
-    val password: String = "H@rdlimp501",
+    val label: String = "",
+    val host: String = "",
+    val port: String = "22",
+    val username: String = "",
+    val password: String = "",
     val usePrivateKey: Boolean = false,
     val privateKeyData: String = "",
     val keyPassphrase: String = "",

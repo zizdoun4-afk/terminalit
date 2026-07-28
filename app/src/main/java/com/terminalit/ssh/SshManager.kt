@@ -44,6 +44,7 @@ sealed class SshEvent {
     data class Error(val message: String) : SshEvent()
     data object Disconnected : SshEvent()
     data object Connected : SshEvent()
+    data object AuthFailed : SshEvent()
 }
 
 class SshManager(private val hostKeyStore: HostKeyStore) {
@@ -62,6 +63,22 @@ class SshManager(private val hostKeyStore: HostKeyStore) {
         try {
             val j = JSch()
             jsch = j
+
+            JSch.setLogger(object : com.jcraft.jsch.Logger {
+                override fun isEnabled(level: Int): Boolean = true
+                override fun log(level: Int, message: String?) {
+                    val tag = "JSchDebug"
+                    val msg = message ?: ""
+                    when (level) {
+                        com.jcraft.jsch.Logger.DEBUG -> android.util.Log.d(tag, msg)
+                        com.jcraft.jsch.Logger.INFO  -> android.util.Log.i(tag, msg)
+                        com.jcraft.jsch.Logger.WARN  -> android.util.Log.w(tag, msg)
+                        com.jcraft.jsch.Logger.ERROR -> android.util.Log.e(tag, msg)
+                        com.jcraft.jsch.Logger.FATAL -> android.util.Log.wtf(tag, msg)
+                    }
+                }
+            })
+
 
             if (config.authType is AuthType.PrivateKey) {
                 val privKeyBytes = config.authType.keyData.toByteArray(Charsets.UTF_8)
@@ -124,6 +141,25 @@ class SshManager(private val hostKeyStore: HostKeyStore) {
                 sess.setPassword(config.authType.password)
             }
 
+            val pwd = (config.authType as? AuthType.Password)?.password
+            val userInfo = object : com.jcraft.jsch.UserInfo, com.jcraft.jsch.UIKeyboardInteractive {
+                override fun getPassphrase(): String? = null
+                override fun getPassword(): String? = pwd
+                override fun promptPassword(message: String?): Boolean = pwd != null
+                override fun promptPassphrase(message: String?): Boolean = false
+                override fun promptYesNo(message: String?): Boolean = true
+                override fun showMessage(message: String?) {}
+                override fun promptKeyboardInteractive(
+                    destination: String?, name: String?, instruction: String?,
+                    prompt: Array<out String>?, echo: BooleanArray?
+                ): Array<String>? {
+                    return if (pwd != null && prompt != null && prompt.isNotEmpty()) {
+                        Array(prompt.size) { pwd }
+                    } else null
+                }
+            }
+            sess.setUserInfo(userInfo)
+
             // Connect — JSch will throw a JSchException BEFORE authentication if check() returns NOT_INCLUDED or CHANGED
             try {
                 sess.connect(30000)
@@ -135,6 +171,13 @@ class SshManager(private val hostKeyStore: HostKeyStore) {
                     onEvent(checkResult!!)
                     return@withContext
                 } else {
+                    val isAuthFail = e.message?.contains("auth", ignoreCase = true) == true
+                    if (isAuthFail) {
+                        connected.set(false)
+                        sess.disconnect()
+                        onEvent(SshEvent.AuthFailed)
+                        return@withContext
+                    }
                     throw e
                 }
             }
@@ -142,7 +185,12 @@ class SshManager(private val hostKeyStore: HostKeyStore) {
         } catch (e: Exception) {
             connected.set(false)
             session?.disconnect()
-            onEvent(SshEvent.Error(e.message ?: "Connection failed"))
+            val isAuthFail = e.message?.contains("auth", ignoreCase = true) == true
+            if (isAuthFail) {
+                onEvent(SshEvent.AuthFailed)
+            } else {
+                onEvent(SshEvent.Error(e.message ?: "Connection failed"))
+            }
         }
     }
 
@@ -160,10 +208,11 @@ class SshManager(private val hostKeyStore: HostKeyStore) {
         try {
             channel = session!!.openChannel("shell") as ChannelShell
             channel!!.setPtyType("xterm-256color", 80, 24, 0, 0)
-            channel!!.connect(10000)
 
             inputStream = channel!!.inputStream
             outputStream = channel!!.outputStream
+
+            channel!!.connect(10000)
 
             connected.set(true)
             onEvent(SshEvent.Connected)

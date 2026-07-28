@@ -13,6 +13,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 import com.terminalit.model.ConnectionConfig
+import com.terminalit.model.ExtraKey
+import com.terminalit.data.ExtraKeyStore
 
 data class TerminalUiState(
     val snapshot: TerminalSnapshot = TerminalSnapshot(
@@ -25,12 +27,14 @@ data class TerminalUiState(
     val sessionState: SessionState = SessionState.Disconnected,
     val currentConfig: ConnectionConfig? = null,
     val textareaMode: Boolean = false,
-    val textareaContent: String = ""
+    val textareaContent: String = "",
+    val extraKeys: List<ExtraKey> = emptyList()
 )
 
 @HiltViewModel
 class TerminalViewModel @Inject constructor(
-    private val repository: SessionRepository
+    private val repository: SessionRepository,
+    private val extraKeyStore: ExtraKeyStore
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TerminalUiState())
@@ -55,6 +59,12 @@ class TerminalViewModel @Inject constructor(
         viewModelScope.launch {
             repository.currentConfig.collect { config ->
                 _uiState.value = _uiState.value.copy(currentConfig = config)
+            }
+        }
+
+        viewModelScope.launch {
+            extraKeyStore.extraKeys.collect { keys ->
+                _uiState.value = _uiState.value.copy(extraKeys = keys)
             }
         }
     }
@@ -100,5 +110,9 @@ class TerminalViewModel @Inject constructor(
 
     fun disconnect() {
         repository.disconnect()
+    }
+
+    fun resizeTerminal(cols: Int, rows: Int) {
+        repository.resizeTerminal(cols, rows)
     }
 }

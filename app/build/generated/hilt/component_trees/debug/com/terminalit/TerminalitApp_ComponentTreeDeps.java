@@ -20,6 +20,7 @@ import dagger.hilt.processor.internal.definecomponent.codegen._dagger_hilt_compo
 import hilt_aggregated_deps._com_terminalit_MainActivity_GeneratedInjector;
 import hilt_aggregated_deps._com_terminalit_TerminalitApp_GeneratedInjector;
 import hilt_aggregated_deps._com_terminalit_di_AppModule;
+import hilt_aggregated_deps._com_terminalit_di_ExtraKeyStoreEntryPoint;
 import hilt_aggregated_deps._com_terminalit_service_SshSessionService_GeneratedInjector;
 import hilt_aggregated_deps._com_terminalit_viewmodel_ConnectionViewModel_HiltModules_BindsModule;
 import hilt_aggregated_deps._com_terminalit_viewmodel_ConnectionViewModel_HiltModules_KeyModule;
@@ -70,6 +71,7 @@ import hilt_aggregated_deps._dagger_hilt_android_internal_modules_HiltWrapper_Ac
         _com_terminalit_MainActivity_GeneratedInjector.class,
         _com_terminalit_TerminalitApp_GeneratedInjector.class,
         _com_terminalit_di_AppModule.class,
+        _com_terminalit_di_ExtraKeyStoreEntryPoint.class,
         _com_terminalit_service_SshSessionService_GeneratedInjector.class,
         _com_terminalit_viewmodel_ConnectionViewModel_HiltModules_BindsModule.class,
         _com_terminalit_viewmodel_ConnectionViewModel_HiltModules_KeyModule.class,

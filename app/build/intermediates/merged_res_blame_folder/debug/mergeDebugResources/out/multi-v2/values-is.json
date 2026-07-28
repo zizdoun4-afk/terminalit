@@ -4,24 +4,7 @@
             "outputFile": "com.terminalit.app-mergeDebugResources-58:/values-is/values-is.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\dounga222\\.gradle\\caches\\transforms-4\\93847007fcc018673b66b67d2d3d58ee\\transformed\\ui-release\\res\\values-is\\values-is.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "105,196,277,376,475,560,640,735,824,906,974,1042,1120,1203,1273,1350,1418",
-                        "endColumns": "90,80,98,98,84,79,94,88,81,67,67,77,82,69,76,67,119",
-                        "endOffsets": "191,272,371,470,555,635,730,819,901,969,1037,1115,1198,1268,1345,1413,1533"
-                    },
-                    "to": {
-                        "startLines": "38,39,41,43,44,60,61,118,119,120,121,122,123,126,128,129,130",
-                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
-                        "startOffsets": "3759,3850,4040,4228,4327,6301,6381,12551,12640,12722,12790,12858,12936,13225,13396,13473,13541",
-                        "endColumns": "90,80,98,98,84,79,94,88,81,67,67,77,82,69,76,67,119",
-                        "endOffsets": "3845,3926,4134,4322,4407,6376,6471,12635,12717,12785,12853,12931,13014,13290,13468,13536,13656"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\dounga222\\.gradle\\caches\\transforms-4\\89796d1e313a80b603ac04b884ff7b5e\\transformed\\material3-release\\res\\values-is\\values-is.xml",
+                    "source": "C:\\Users\\hp\\.gradle\\caches\\transforms-4\\89796d1e313a80b603ac04b884ff7b5e\\transformed\\material3-release\\res\\values-is\\values-is.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -38,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\dounga222\\.gradle\\caches\\transforms-4\\2c570d1fad298927fd8fe3cc67fcbf89\\transformed\\core-1.12.0\\res\\values-is\\values-is.xml",
+                    "source": "C:\\Users\\hp\\.gradle\\caches\\transforms-4\\2c570d1fad298927fd8fe3cc67fcbf89\\transformed\\core-1.12.0\\res\\values-is\\values-is.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
@@ -55,7 +38,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\dounga222\\.gradle\\caches\\transforms-4\\54b86287bc837b884e7ed00a5ebe37d7\\transformed\\appcompat-1.2.0\\res\\values-is\\values-is.xml",
+                    "source": "C:\\Users\\hp\\.gradle\\caches\\transforms-4\\54b86287bc837b884e7ed00a5ebe37d7\\transformed\\appcompat-1.2.0\\res\\values-is\\values-is.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -72,7 +55,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\dounga222\\.gradle\\caches\\transforms-4\\1335e750a14b2b0a44edc8ed47375e17\\transformed\\biometric-1.2.0-alpha05\\res\\values-is\\values-is.xml",
+                    "source": "C:\\Users\\hp\\.gradle\\caches\\transforms-4\\1335e750a14b2b0a44edc8ed47375e17\\transformed\\biometric-1.2.0-alpha05\\res\\values-is\\values-is.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -89,7 +72,24 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\dounga222\\.gradle\\caches\\transforms-4\\6e377038b31c60653ffd7d993d7e2083\\transformed\\foundation-release\\res\\values-is\\values-is.xml",
+                    "source": "C:\\Users\\hp\\.gradle\\caches\\transforms-4\\93847007fcc018673b66b67d2d3d58ee\\transformed\\ui-release\\res\\values-is\\values-is.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "105,196,277,376,475,560,640,735,824,906,974,1042,1120,1203,1273,1350,1418",
+                        "endColumns": "90,80,98,98,84,79,94,88,81,67,67,77,82,69,76,67,119",
+                        "endOffsets": "191,272,371,470,555,635,730,819,901,969,1037,1115,1198,1268,1345,1413,1533"
+                    },
+                    "to": {
+                        "startLines": "38,39,41,43,44,60,61,118,119,120,121,122,123,126,128,129,130",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "3759,3850,4040,4228,4327,6301,6381,12551,12640,12722,12790,12858,12936,13225,13396,13473,13541",
+                        "endColumns": "90,80,98,98,84,79,94,88,81,67,67,77,82,69,76,67,119",
+                        "endOffsets": "3845,3926,4134,4322,4407,6376,6471,12635,12717,12785,12853,12931,13014,13290,13468,13536,13656"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\hp\\.gradle\\caches\\transforms-4\\6e377038b31c60653ffd7d993d7e2083\\transformed\\foundation-release\\res\\values-is\\values-is.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",

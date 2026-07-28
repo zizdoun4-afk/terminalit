@@ -1,6 +1,7 @@
 package com.terminalit.ui.screens
 
-import androidx.compose.foundation.background
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,32 +12,101 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Computer
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.terminalit.model.ServerProfile
+import com.terminalit.ui.components.ExportImportHelper
+import com.terminalit.ui.components.PasswordInputDialog
 import com.terminalit.viewmodel.ProfileListViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileListScreen(
     onNavigateToCreate: () -> Unit,
     onNavigateToEdit: (String) -> Unit,
     onConnect: (ServerProfile) -> Unit,
+    onNavigateToExtraKeys: () -> Unit,
     viewModel: ProfileListViewModel = hiltViewModel()
 ) {
     val profiles by viewModel.profiles.collectAsState()
     val isBiometricLockEnabled by viewModel.isBiometricLockEnabled.collectAsState()
 
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    var showMenu by remember { mutableStateOf(false) }
+    var pendingUri by remember { mutableStateOf<android.net.Uri?>(null) }
+    var showExportPasswordDialog by remember { mutableStateOf(false) }
+    var showImportPasswordDialog by remember { mutableStateOf(false) }
+
+    val exportLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/json"),
+        onResult = { uri ->
+            if (uri != null) {
+                pendingUri = uri
+                showExportPasswordDialog = true
+            }
+        }
+    )
+
+    val importLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri ->
+            if (uri != null) {
+                pendingUri = uri
+                showImportPasswordDialog = true
+            }
+        }
+    )
+
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Terminalit") },
+                actions = {
+                    IconButton(onClick = { showMenu = true }) {
+                        Icon(Icons.Default.MoreVert, contentDescription = "Menu")
+                    }
+                    DropdownMenu(
+                        expanded = showMenu,
+                        onDismissRequest = { showMenu = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Configure Extra Keys") },
+                            onClick = {
+                                showMenu = false
+                                onNavigateToExtraKeys()
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Export Profiles") },
+                            onClick = {
+                                showMenu = false
+                                exportLauncher.launch("profiles_backup.json")
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("Import Profiles") },
+                            onClick = {
+                                showMenu = false
+                                importLauncher.launch("application/json")
+                            }
+                        )
+                    }
+                }
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onNavigateToCreate,
@@ -48,6 +118,55 @@ fun ProfileListScreen(
         },
         containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
+        if (showExportPasswordDialog) {
+            PasswordInputDialog(
+                title = "Export Profiles",
+                onConfirm = { password ->
+                    showExportPasswordDialog = false
+                    val uri = pendingUri
+                    if (uri != null) {
+                        coroutineScope.launch(Dispatchers.IO) {
+                            try {
+                                val encryptedJson = ExportImportHelper.encryptProfiles(profiles, password.toCharArray())
+                                context.contentResolver.openOutputStream(uri)?.use { output ->
+                                    output.write(encryptedJson.toByteArray(Charsets.UTF_8))
+                                }
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                        }
+                    }
+                },
+                onDismiss = { showExportPasswordDialog = false }
+            )
+        }
+
+        if (showImportPasswordDialog) {
+            PasswordInputDialog(
+                title = "Import Profiles",
+                onConfirm = { password ->
+                    showImportPasswordDialog = false
+                    val uri = pendingUri
+                    if (uri != null) {
+                        coroutineScope.launch(Dispatchers.IO) {
+                            try {
+                                val encryptedJson = context.contentResolver.openInputStream(uri)?.use { input ->
+                                    input.readBytes().toString(Charsets.UTF_8)
+                                }
+                                if (encryptedJson != null) {
+                                    val imported = ExportImportHelper.decryptProfiles(encryptedJson, password.toCharArray())
+                                    viewModel.importProfiles(imported)
+                                }
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                        }
+                    }
+                },
+                onDismiss = { showImportPasswordDialog = false }
+            )
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()

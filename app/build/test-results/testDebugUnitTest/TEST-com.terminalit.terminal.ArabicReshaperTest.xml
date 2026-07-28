@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.terminalit.terminal.ArabicReshaperTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-07-28T11:26:24" hostname="DESKTOP-5CVCKUN" time="0.027">
+  <properties/>
+  <testcase name="isolatedBaReshapesToIsolatedPresentationForm" classname="com.terminalit.terminal.ArabicReshaperTest" time="0.023"/>
+  <testcase name="mixedArabicAndLatinTextArabicIsShapedLatinIsUnchanged" classname="com.terminalit.terminal.ArabicReshaperTest" time="0.001"/>
+  <testcase name="rightJoiningLetterBreaksJoiningContext" classname="com.terminalit.terminal.ArabicReshaperTest" time="0.0"/>
+  <testcase name="lamFollowedByAlefMaddaProducesCorrectLigature" classname="com.terminalit.terminal.ArabicReshaperTest" time="0.001"/>
+  <testcase name="lamFollowedByAlefProducesLigature" classname="com.terminalit.terminal.ArabicReshaperTest" time="0.0"/>
+  <testcase name="middleLetterTakesMedialFormWhenSurroundedByDualJoiningLetters" classname="com.terminalit.terminal.ArabicReshaperTest" time="0.001"/>
+  <testcase name="nonArabicTextIsReturnedUnchanged" classname="com.terminalit.terminal.ArabicReshaperTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

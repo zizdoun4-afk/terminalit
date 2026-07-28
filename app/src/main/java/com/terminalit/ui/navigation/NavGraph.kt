@@ -6,14 +6,18 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.compose.runtime.remember
 import com.terminalit.ui.screens.ConnectionScreen
 import com.terminalit.ui.screens.ProfileListScreen
 import com.terminalit.ui.screens.TerminalScreen
+import com.terminalit.ui.screens.ExtraKeysConfigScreen
+import com.terminalit.di.ExtraKeyStoreEntryPoint
 
 object Routes {
     const val PROFILE_LIST = "profile_list"
     const val CONNECTION = "connection?profileId={profileId}"
     const val TERMINAL = "terminal"
+    const val EXTRA_KEYS_CONFIG = "extra_keys_config"
 
     fun connection(profileId: String? = null): String {
         return if (profileId != null) "connection?profileId=$profileId" else "connection"
@@ -31,13 +35,9 @@ fun TerminalitNavGraph(navController: NavHostController) {
                 onNavigateToCreate = { navController.navigate(Routes.connection()) },
                 onNavigateToEdit = { id -> navController.navigate(Routes.connection(id)) },
                 onConnect = { profile -> 
-                    // To handle direct connection we can pass profile to a shared ViewModel
-                    // But simpler: just navigate to connection screen with profileId and let user click connect
-                    // OR we navigate to terminal but we need to trigger connect.
-                    // For now, let's navigate to connection screen so they can click Connect, 
-                    // or ideally we could just connect directly. Let's navigate to connection screen
                     navController.navigate(Routes.connection(profile.id))
-                }
+                },
+                onNavigateToExtraKeys = { navController.navigate(Routes.EXTRA_KEYS_CONFIG) }
             )
         }
 
@@ -63,6 +63,20 @@ fun TerminalitNavGraph(navController: NavHostController) {
 
         composable(Routes.TERMINAL) {
             TerminalScreen()
+        }
+
+        composable(Routes.EXTRA_KEYS_CONFIG) {
+            val context = androidx.compose.ui.platform.LocalContext.current
+            val entryPoint = remember(context) {
+                dagger.hilt.EntryPoints.get(
+                    context.applicationContext,
+                    ExtraKeyStoreEntryPoint::class.java
+                )
+            }
+            ExtraKeysConfigScreen(
+                extraKeyStore = entryPoint.extraKeyStore(),
+                onNavigateBack = { navController.popBackStack() }
+            )
         }
     }
 }

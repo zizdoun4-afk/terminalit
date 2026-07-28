@@ -41,4 +41,12 @@ class ProfileListViewModel @Inject constructor(
             profileStore.deleteProfile(id)
         }
     }
+
+    fun importProfiles(imported: List<ServerProfile>) {
+        viewModelScope.launch {
+            imported.forEach { profile ->
+                profileStore.saveProfile(profile)
+            }
+        }
+    }
 }

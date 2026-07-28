@@ -91,4 +91,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
 
     // BiDi via java.text.Bidi (built into Android)
+
+    // Unit tests
+    testImplementation("junit:junit:4.13.2")
 }

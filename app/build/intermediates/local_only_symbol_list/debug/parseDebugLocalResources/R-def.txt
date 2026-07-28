@@ -29,4 +29,6 @@ string send
 string textarea_hint
 string username_label
 style Theme.Terminalit
+xml backup_rules
+xml data_extraction_rules
 xml network_security_config

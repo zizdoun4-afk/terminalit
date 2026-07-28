@@ -34,10 +34,12 @@ class TerminalBuffer(
     private val scrollbackLimit = 10000
 
     init {
-        resize(initialCols, initialRows)
+        synchronized(this) {
+            resize(initialCols, initialRows)
+        }
     }
 
-    fun resize(newCols: Int, newRows: Int) {
+    fun resize(newCols: Int, newRows: Int) = synchronized(this) {
         cols = newCols
         rows = newRows
         while (_lines.size < newRows) {
@@ -50,7 +52,7 @@ class TerminalBuffer(
         cursorCol = min(cursorCol, newCols - 1)
     }
 
-    fun snapshot(): TerminalSnapshot {
+    fun snapshot(): TerminalSnapshot = synchronized(this) {
         val startIdx = max(0, _lines.size - rows - scrollOffset)
         val endIdx = min(_lines.size, startIdx + rows)
         val visible = _lines.subList(startIdx, endIdx).map { it.toList() }
@@ -65,20 +67,20 @@ class TerminalBuffer(
         )
     }
 
-    fun scrollBy(offset: Int) {
+    fun scrollBy(offset: Int) = synchronized(this) {
         val maxScroll = max(0, _lines.size - rows)
         scrollOffset = max(0, min(maxScroll, scrollOffset + offset))
     }
 
-    fun scrollToBottom() {
+    fun scrollToBottom() = synchronized(this) {
         scrollOffset = 0
     }
 
-    fun setStyle(style: TerminalStyle) {
+    fun setStyle(style: TerminalStyle) = synchronized(this) {
         currentStyle = style
     }
 
-    fun writeChar(c: Char) {
+    fun writeChar(c: Char) = synchronized(this) {
         when (c) {
             '\r' -> {
                 cursorCol = 0
@@ -123,50 +125,50 @@ class TerminalBuffer(
         }
     }
 
-    fun writeString(s: String) {
+    fun writeString(s: String) = synchronized(this) {
         for (c in s) writeChar(c)
     }
 
-    fun cursorUp(n: Int = 1) {
+    fun cursorUp(n: Int = 1) = synchronized(this) {
         cursorRow = max(0, cursorRow - n)
         wrapNext = false
     }
 
-    fun cursorDown(n: Int = 1) {
+    fun cursorDown(n: Int = 1) = synchronized(this) {
         if (_lines.isEmpty()) return
         cursorRow = min(_lines.size - 1, cursorRow + n)
         wrapNext = false
     }
 
-    fun cursorForward(n: Int = 1) {
+    fun cursorForward(n: Int = 1) = synchronized(this) {
         cursorCol = min(cols - 1, cursorCol + n)
         wrapNext = false
     }
 
-    fun cursorBack(n: Int = 1) {
+    fun cursorBack(n: Int = 1) = synchronized(this) {
         cursorCol = max(0, cursorCol - n)
         wrapNext = false
     }
 
-    fun cursorPosition(row: Int, col: Int) {
+    fun cursorPosition(row: Int, col: Int) = synchronized(this) {
         cursorRow = max(0, min(rows - 1, row))
         cursorCol = max(0, min(cols - 1, col))
         wrapNext = false
     }
 
-    fun cursorSave() {
+    fun cursorSave() = synchronized(this) {
         savedCursorRow = cursorRow
         savedCursorCol = cursorCol
         savedStyle = currentStyle
     }
 
-    fun cursorRestore() {
+    fun cursorRestore() = synchronized(this) {
         cursorRow = savedCursorRow
         cursorCol = savedCursorCol
         currentStyle = savedStyle
     }
 
-    fun eraseDisplay(mode: Int = 0) {
+    fun eraseDisplay(mode: Int = 0) = synchronized(this) {
         when (mode) {
             0 -> {
                 eraseLine(0)
@@ -188,7 +190,7 @@ class TerminalBuffer(
         }
     }
 
-    fun eraseLine(mode: Int = 0) {
+    fun eraseLine(mode: Int = 0) = synchronized(this) {
         ensureLineExists()
         val line = _lines[cursorRow]
         when (mode) {
@@ -210,7 +212,7 @@ class TerminalBuffer(
         }
     }
 
-    fun eraseChars(n: Int = 1) {
+    fun eraseChars(n: Int = 1) = synchronized(this) {
         ensureLineExists()
         val line = _lines[cursorRow]
         for (i in 0 until n) {
@@ -219,7 +221,7 @@ class TerminalBuffer(
         }
     }
 
-    fun insertLines(n: Int = 1) {
+    fun insertLines(n: Int = 1) = synchronized(this) {
         for (i in 0 until n) {
             _lines.add(cursorRow, emptyLine())
             if (_lines.size > rows + maxOf(0, scrollbackTop)) {
@@ -232,7 +234,7 @@ class TerminalBuffer(
         }
     }
 
-    fun deleteLines(n: Int = 1) {
+    fun deleteLines(n: Int = 1) = synchronized(this) {
         for (i in 0 until n) {
             if (cursorRow < _lines.size) {
                 _lines.removeAt(cursorRow)
@@ -241,21 +243,21 @@ class TerminalBuffer(
         }
     }
 
-    fun scrollUp(n: Int = 1) {
+    fun scrollUp(n: Int = 1) = synchronized(this) {
         for (i in 0 until n) {
             _lines.add(emptyLine())
             _lines.removeAt(0)
         }
     }
 
-    fun scrollDown(n: Int = 1) {
+    fun scrollDown(n: Int = 1) = synchronized(this) {
         for (i in 0 until n) {
             _lines.add(0, emptyLine())
             _lines.removeAt(_lines.lastIndex)
         }
     }
 
-    fun insertBlankChars(n: Int = 1) {
+    fun insertBlankChars(n: Int = 1) = synchronized(this) {
         ensureLineExists()
         val line = _lines[cursorRow]
         for (i in 0 until n) {
@@ -264,7 +266,7 @@ class TerminalBuffer(
         while (line.size > cols) line.removeAt(line.lastIndex)
     }
 
-    fun deleteChars(n: Int = 1) {
+    fun deleteChars(n: Int = 1) = synchronized(this) {
         ensureLineExists()
         val line = _lines[cursorRow]
         for (i in 0 until n) {
@@ -273,40 +275,40 @@ class TerminalBuffer(
         while (line.size < cols) line.add(TerminalCell.EMPTY)
     }
 
-    fun newline() {
+    fun newline() = synchronized(this) {
         cursorRow++
         cursorCol = 0
         wrapNext = false
         scrollIfNeeded()
     }
 
-    fun carriageReturn() {
+    fun carriageReturn() = synchronized(this) {
         cursorCol = 0
         wrapNext = false
     }
 
-    fun horizontalPosition(col: Int) {
+    fun horizontalPosition(col: Int) = synchronized(this) {
         cursorCol = max(0, min(cols - 1, col))
     }
 
-    fun verticalPosition(row: Int) {
+    fun verticalPosition(row: Int) = synchronized(this) {
         cursorRow = max(0, min(rows - 1, row))
     }
 
-    fun verticalRelative(n: Int) {
+    fun verticalRelative(n: Int) = synchronized(this) {
         cursorRow = max(0, min(_lines.size - 1, cursorRow + n))
     }
 
-    fun horizontalRelative(n: Int) {
+    fun horizontalRelative(n: Int) = synchronized(this) {
         cursorCol = max(0, min(cols - 1, cursorCol + n))
     }
 
-    fun index() {
+    fun index() = synchronized(this) {
         cursorRow++
         scrollIfNeeded()
     }
 
-    fun reverseIndex() {
+    fun reverseIndex() = synchronized(this) {
         cursorRow--
         if (cursorRow < 0) {
             cursorRow = 0
@@ -317,17 +319,17 @@ class TerminalBuffer(
         }
     }
 
-    fun nextLine() {
+    fun nextLine() = synchronized(this) {
         cursorRow++
         cursorCol = 0
         scrollIfNeeded()
     }
 
-    fun tabSet() {
+    fun tabSet() = synchronized(this) {
         // Simplified: no tab stops, use fixed 8-char tabs
     }
 
-    fun reset() {
+    fun reset() = synchronized(this) {
         _lines.clear()
         cursorRow = 0
         cursorCol = 0

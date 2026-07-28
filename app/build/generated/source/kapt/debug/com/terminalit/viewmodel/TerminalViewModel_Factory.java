@@ -1,5 +1,6 @@
 package com.terminalit.viewmodel;
 
+import com.terminalit.data.ExtraKeyStore;
 import com.terminalit.repository.SessionRepository;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
@@ -24,20 +25,26 @@ import javax.inject.Provider;
 public final class TerminalViewModel_Factory implements Factory<TerminalViewModel> {
   private final Provider<SessionRepository> repositoryProvider;
 
-  public TerminalViewModel_Factory(Provider<SessionRepository> repositoryProvider) {
+  private final Provider<ExtraKeyStore> extraKeyStoreProvider;
+
+  public TerminalViewModel_Factory(Provider<SessionRepository> repositoryProvider,
+      Provider<ExtraKeyStore> extraKeyStoreProvider) {
     this.repositoryProvider = repositoryProvider;
+    this.extraKeyStoreProvider = extraKeyStoreProvider;
   }
 
   @Override
   public TerminalViewModel get() {
-    return newInstance(repositoryProvider.get());
+    return newInstance(repositoryProvider.get(), extraKeyStoreProvider.get());
   }
 
-  public static TerminalViewModel_Factory create(Provider<SessionRepository> repositoryProvider) {
-    return new TerminalViewModel_Factory(repositoryProvider);
+  public static TerminalViewModel_Factory create(Provider<SessionRepository> repositoryProvider,
+      Provider<ExtraKeyStore> extraKeyStoreProvider) {
+    return new TerminalViewModel_Factory(repositoryProvider, extraKeyStoreProvider);
   }
 
-  public static TerminalViewModel newInstance(SessionRepository repository) {
-    return new TerminalViewModel(repository);
+  public static TerminalViewModel newInstance(SessionRepository repository,
+      ExtraKeyStore extraKeyStore) {
+    return new TerminalViewModel(repository, extraKeyStore);
   }
 }

@@ -1,25 +1,29 @@
 package com.terminalit.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -43,24 +47,27 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.googlefonts.Font as GoogleFontFont
 import androidx.compose.ui.text.googlefonts.GoogleFont
@@ -68,6 +75,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -75,9 +83,9 @@ import com.terminalit.model.TerminalCell
 import com.terminalit.model.TerminalSnapshot
 import com.terminalit.model.TerminalStyle
 import com.terminalit.repository.SessionState
-import com.terminalit.terminal.ArabicReshaper
 import com.terminalit.ui.components.ExtraKeysBar
 import com.terminalit.viewmodel.TerminalViewModel
+import kotlin.math.roundToInt
 
 private val fontProvider = GoogleFont.Provider(
     providerAuthority = "com.google.android.gms.fonts",
@@ -93,6 +101,11 @@ private val terminalFontFamily = FontFamily(
     GoogleFontFont(googleFont = arabicGoogleFont, fontProvider = fontProvider)
 )
 
+// Approximate advance-width ratio for Roboto Mono: char width ≈ 0.6 × font size
+private const val MONO_CHAR_WIDTH_RATIO = 0.601f
+// Line height ratio relative to font size
+private const val LINE_HEIGHT_RATIO     = 1.214f  // matches lineHeight = 17.sp at fontSize = 14.sp
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TerminalScreen(
@@ -103,6 +116,10 @@ fun TerminalScreen(
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     var isFocused by remember { mutableStateOf(false) }
+
+    // ── Item 6: font size state (clamped 8–24 sp, default 14 sp) ────────────
+    var fontSizeSp by remember { mutableFloatStateOf(14f) }
+    val clampedFontSizeSp = fontSizeSp.coerceIn(8f, 24f)
 
     val dummyText = " ".repeat(100)
     var textFieldValue by remember { mutableStateOf(TextFieldValue(dummyText, TextRange(dummyText.length))) }
@@ -126,74 +143,112 @@ fun TerminalScreen(
             .statusBarsPadding()
             .imePadding()
     ) {
-        // Sleek Top Header Bar
         TerminalTopBar(
             sessionState = uiState.sessionState,
             config = uiState.currentConfig,
+            fontSizeSp = clampedFontSizeSp,
             onDisconnect = { viewModel.disconnect() },
             onToggleTextarea = { viewModel.toggleTextareaMode() },
             onShowKeyboard = {
                 focusRequester.requestFocus()
                 keyboardController?.show()
-            }
+            },
+            // ── Item 6: font size ± buttons ──────────────────────────────────
+            onFontIncrease = { fontSizeSp = (fontSizeSp + 1f).coerceAtMost(24f) },
+            onFontDecrease = { fontSizeSp = (fontSizeSp - 1f).coerceAtLeast(8f) }
         )
 
-        Box(
+        // ── Item 4: BoxWithConstraints to get layout pixels for col/row calc ─
+        BoxWithConstraints(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
-                .pointerInput(keyboardController) {
-                    detectTapGestures {
-                        focusRequester.requestFocus()
-                        keyboardController?.show()
-                    }
-                }
         ) {
-            TerminalView(
-                snapshot = uiState.snapshot,
-                modifier = Modifier.fillMaxSize()
-            )
+            val density = LocalDensity.current
+            val availableWidthPx  = with(density) { maxWidth.toPx() }
+            val availableHeightPx = with(density) { maxHeight.toPx() }
+            val fontSizePx        = with(density) { clampedFontSizeSp.sp.toPx() }
 
-            // Invisible text input field to capture keyboard
-            BasicTextField(
-                value = textFieldValue,
-                onValueChange = { newValue ->
-                    val oldText = textFieldValue.text
-                    val newText = newValue.text
+            // char width for a monospace font at current font size
+            val charWidthPx  = fontSizePx * MONO_CHAR_WIDTH_RATIO
+            val lineHeightPx = fontSizePx * LINE_HEIGHT_RATIO
 
-                    if (newText.length < oldText.length) {
-                        val deleted = oldText.length - newText.length
-                        viewModel.sendRaw(ByteArray(deleted) { 0x7F.toByte() })
-                    } else if (newText.length > oldText.length) {
-                        val added = newText.substring(oldText.length)
-                        viewModel.sendText(added)
-                    }
+            // clamp to sensible minimums to avoid divide-by-zero
+            val cols = (availableWidthPx / charWidthPx).toInt().coerceAtLeast(20)
+            val rows = (availableHeightPx / lineHeightPx).toInt().coerceAtLeast(6)
 
-                    if (newText.length < 10 || newText.length > 200) {
-                        textFieldValue = TextFieldValue(dummyText, TextRange(dummyText.length))
-                    } else {
-                        textFieldValue = newValue
-                    }
-                },
+            // Notify the SSH pty whenever cols, rows, or font size changes
+            LaunchedEffect(cols, rows) {
+                viewModel.resizeTerminal(cols, rows)
+            }
+
+            Box(
                 modifier = Modifier
-                    .size(1.dp)
-                    .alpha(0f)
-                    .focusRequester(focusRequester)
-                    .onFocusChanged { isFocused = it.isFocused },
-                textStyle = TextStyle(color = Color.Transparent, fontSize = 1.sp),
-                cursorBrush = SolidColor(Color.Transparent),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.None
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = { focusManager.clearFocus() }
-                ),
-                decorationBox = { _ -> }
-            )
+                    .fillMaxSize()
+                    // ── Item 6: pinch-to-zoom for font size ──────────────────
+                    .pointerInput(Unit) {
+                        detectTransformGestures(panZoomLock = true) { _, _, zoom, _ ->
+                            fontSizeSp = (fontSizeSp * zoom).coerceIn(8f, 24f)
+                        }
+                    }
+                    // Tap to refocus keyboard — separate pointerInput key so it
+                    // does not interfere with the transform gesture recogniser
+                    .pointerInput(keyboardController) {
+                        detectTapGestures {
+                            focusRequester.requestFocus()
+                            keyboardController?.show()
+                        }
+                    }
+            ) {
+                TerminalView(
+                    snapshot  = uiState.snapshot,
+                    fontSizeSp = clampedFontSizeSp,
+                    modifier  = Modifier.fillMaxSize()
+                )
+
+                // Invisible text input field to capture keyboard
+                BasicTextField(
+                    value = textFieldValue,
+                    onValueChange = { newValue ->
+                        val oldText = textFieldValue.text
+                        val newText = newValue.text
+
+                        if (newText.length < oldText.length) {
+                            val deleted = oldText.length - newText.length
+                            viewModel.sendRaw(ByteArray(deleted) { 0x7F.toByte() })
+                        } else if (newText.length > oldText.length) {
+                            // ── Item 1: replace \n with \r for typed Enter ────
+                            val added = newText.substring(oldText.length).replace("\n", "\r")
+                            viewModel.sendText(added)
+                        }
+
+                        textFieldValue = if (newText.length < 10 || newText.length > 200) {
+                            TextFieldValue(dummyText, TextRange(dummyText.length))
+                        } else {
+                            newValue
+                        }
+                    },
+                    modifier = Modifier
+                        .size(1.dp)
+                        .alpha(0f)
+                        .focusRequester(focusRequester)
+                        .onFocusChanged { isFocused = it.isFocused },
+                    textStyle = TextStyle(color = Color.Transparent, fontSize = 1.sp),
+                    cursorBrush = SolidColor(Color.Transparent),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.None
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { focusManager.clearFocus() }
+                    ),
+                    decorationBox = { _ -> }
+                )
+            }
         }
 
         ExtraKeysBar(
+            keys = uiState.extraKeys,
             onKey = { key -> viewModel.sendText(key) },
             onPaste = { text ->
                 val convertedText = text.replace("\n", "\r")
@@ -245,9 +300,12 @@ fun TerminalScreen(
 private fun TerminalTopBar(
     sessionState: SessionState,
     config: com.terminalit.model.ConnectionConfig?,
+    fontSizeSp: Float,
     onDisconnect: () -> Unit,
     onToggleTextarea: () -> Unit,
-    onShowKeyboard: () -> Unit
+    onShowKeyboard: () -> Unit,
+    onFontIncrease: () -> Unit,
+    onFontDecrease: () -> Unit
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -291,6 +349,32 @@ private fun TerminalTopBar(
             }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
+                // ── Item 6: font size − / + buttons ──────────────────────────
+                IconButton(
+                    onClick = onFontDecrease,
+                    modifier = Modifier.size(32.dp)
+                ) {
+                    Text(
+                        text = "A−",
+                        style = TextStyle(
+                            fontSize = 11.sp,
+                            color = Color(0xFF64B5F6)
+                        )
+                    )
+                }
+                IconButton(
+                    onClick = onFontIncrease,
+                    modifier = Modifier.size(32.dp)
+                ) {
+                    Text(
+                        text = "A+",
+                        style = TextStyle(
+                            fontSize = 13.sp,
+                            color = Color(0xFF64B5F6)
+                        )
+                    )
+                }
+
                 IconButton(
                     onClick = onShowKeyboard,
                     modifier = Modifier.size(32.dp)
@@ -334,10 +418,10 @@ private fun TerminalTopBar(
 @Composable
 private fun StatusBadge(sessionState: SessionState) {
     val (statusColor, statusText) = when (sessionState) {
-        is SessionState.Connected -> Color(0xFF4CAF50) to "Connected"
-        is SessionState.Connecting -> Color(0xFFFFB300) to "Connecting..."
+        is SessionState.Connected    -> Color(0xFF4CAF50) to "Connected"
+        is SessionState.Connecting   -> Color(0xFFFFB300) to "Connecting..."
         is SessionState.Disconnected -> Color(0xFFE53935) to "Disconnected"
-        is SessionState.Error -> Color(0xFFE53935) to "Error"
+        is SessionState.Error        -> Color(0xFFE53935) to "Error"
     }
 
     Surface(
@@ -369,13 +453,19 @@ private fun StatusBadge(sessionState: SessionState) {
 @Composable
 private fun TerminalView(
     snapshot: TerminalSnapshot,
+    fontSizeSp: Float,
     modifier: Modifier = Modifier
 ) {
-    val verticalScroll = rememberScrollState()
+    val verticalScroll   = rememberScrollState()
     val horizontalScroll = rememberScrollState()
 
-    // Auto-scroll to bottom when new output arrives or when viewport size changes (e.g. keyboard opens)
-    LaunchedEffect(snapshot, verticalScroll.maxValue) {
+    // ── Item 5: scroll to bottom when keyboard opens or new output arrives ───
+    // WindowInsets.ime is @Composable so must be read in composable scope, not in derivedStateOf.
+    val density = LocalDensity.current
+    val imeBottom = WindowInsets.ime.getBottom(density)
+
+    // Scroll to bottom whenever: new output arrives, layout resizes, or IME appears
+    LaunchedEffect(snapshot, verticalScroll.maxValue, imeBottom) {
         if (snapshot.scrollOffset == 0) {
             verticalScroll.scrollTo(verticalScroll.maxValue)
         }
@@ -395,9 +485,10 @@ private fun TerminalView(
                     val isCursorLine = rowIndex == snapshot.cursorRow
 
                     TerminalLine(
-                        cells = line,
-                        cursorCol = if (isCursorLine) snapshot.cursorCol else -1,
-                        modifier = Modifier.fillMaxWidth()
+                        cells      = line,
+                        cursorCol  = if (isCursorLine) snapshot.cursorCol else -1,
+                        fontSizeSp = fontSizeSp,
+                        modifier   = Modifier.fillMaxWidth()
                     )
                 }
             }
@@ -409,8 +500,11 @@ private fun TerminalView(
 private fun TerminalLine(
     cells: List<TerminalCell>,
     cursorCol: Int,
+    fontSizeSp: Float,
     modifier: Modifier = Modifier
 ) {
+    val lineHeightSp = fontSizeSp * LINE_HEIGHT_RATIO
+
     val annotatedString = androidx.compose.ui.text.AnnotatedString.Builder().apply {
         var currentStyle: TerminalStyle? = null
         var currentIsCursor = false
@@ -432,7 +526,7 @@ private fun TerminalLine(
                     androidx.compose.ui.text.SpanStyle(
                         color = Color.Black,
                         background = Color(0xFFCCCCCC),
-                        fontSize = 14.sp,
+                        fontSize = fontSizeSp.sp,
                         fontFamily = terminalFontFamily
                     )
                 )
@@ -441,7 +535,7 @@ private fun TerminalLine(
                     androidx.compose.ui.text.SpanStyle(
                         color = fgColor,
                         background = bgColor,
-                        fontSize = 14.sp,
+                        fontSize = fontSizeSp.sp,
                         fontFamily = terminalFontFamily,
                         fontWeight = if (style.bold) androidx.compose.ui.text.font.FontWeight.Bold else androidx.compose.ui.text.font.FontWeight.Normal,
                         fontStyle = if (style.italic) androidx.compose.ui.text.font.FontStyle.Italic else androidx.compose.ui.text.font.FontStyle.Normal,
@@ -477,8 +571,8 @@ private fun TerminalLine(
         text = annotatedString.toAnnotatedString(),
         style = TextStyle(
             fontFamily = terminalFontFamily,
-            fontSize = 14.sp,
-            lineHeight = 17.sp
+            fontSize = fontSizeSp.sp,
+            lineHeight = lineHeightSp.sp
         ),
         maxLines = 1,
         overflow = TextOverflow.Visible,

@@ -1,6 +1,7 @@
 package com.terminalit;
 
 import com.terminalit.di.AppModule;
+import com.terminalit.di.ExtraKeyStoreEntryPoint;
 import com.terminalit.service.SshSessionService_GeneratedInjector;
 import com.terminalit.viewmodel.ConnectionViewModel_HiltModules;
 import com.terminalit.viewmodel.ProfileListViewModel_HiltModules;
@@ -138,6 +139,7 @@ public final class TerminalitApp_HiltComponents {
   )
   @Singleton
   public abstract static class SingletonC implements TerminalitApp_GeneratedInjector,
+      ExtraKeyStoreEntryPoint,
       FragmentGetContextFix.FragmentGetContextFixEntryPoint,
       HiltWrapper_ActivityRetainedComponentManager_ActivityRetainedComponentBuilderEntryPoint,
       ServiceComponentManager.ServiceComponentBuilderEntryPoint,

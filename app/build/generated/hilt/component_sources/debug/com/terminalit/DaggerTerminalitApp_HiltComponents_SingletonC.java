@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 import com.google.gson.Gson;
+import com.terminalit.data.ExtraKeyStore;
 import com.terminalit.data.HostKeyStore;
 import com.terminalit.data.ProfileStore;
 import com.terminalit.di.AppModule_ProvideGsonFactory;
@@ -473,7 +474,7 @@ public final class DaggerTerminalitApp_HiltComponents_SingletonC {
           return (T) new ProfileListViewModel(singletonCImpl.profileStoreProvider.get());
 
           case 2: // com.terminalit.viewmodel.TerminalViewModel 
-          return (T) new TerminalViewModel(singletonCImpl.sessionRepositoryProvider.get());
+          return (T) new TerminalViewModel(singletonCImpl.sessionRepositoryProvider.get(), singletonCImpl.extraKeyStoreProvider.get());
 
           default: throw new AssertionError(id);
         }
@@ -567,6 +568,8 @@ public final class DaggerTerminalitApp_HiltComponents_SingletonC {
 
     private Provider<Gson> provideGsonProvider;
 
+    private Provider<ExtraKeyStore> extraKeyStoreProvider;
+
     private Provider<ProfileStore> profileStoreProvider;
 
     private Provider<HostKeyStore> hostKeyStoreProvider;
@@ -582,13 +585,19 @@ public final class DaggerTerminalitApp_HiltComponents_SingletonC {
     @SuppressWarnings("unchecked")
     private void initialize(final ApplicationContextModule applicationContextModuleParam) {
       this.provideGsonProvider = DoubleCheck.provider(new SwitchingProvider<Gson>(singletonCImpl, 1));
-      this.profileStoreProvider = DoubleCheck.provider(new SwitchingProvider<ProfileStore>(singletonCImpl, 0));
-      this.hostKeyStoreProvider = DoubleCheck.provider(new SwitchingProvider<HostKeyStore>(singletonCImpl, 3));
-      this.sessionRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<SessionRepository>(singletonCImpl, 2));
+      this.extraKeyStoreProvider = DoubleCheck.provider(new SwitchingProvider<ExtraKeyStore>(singletonCImpl, 0));
+      this.profileStoreProvider = DoubleCheck.provider(new SwitchingProvider<ProfileStore>(singletonCImpl, 2));
+      this.hostKeyStoreProvider = DoubleCheck.provider(new SwitchingProvider<HostKeyStore>(singletonCImpl, 4));
+      this.sessionRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<SessionRepository>(singletonCImpl, 3));
     }
 
     @Override
     public void injectTerminalitApp(TerminalitApp arg0) {
+    }
+
+    @Override
+    public ExtraKeyStore extraKeyStore() {
+      return extraKeyStoreProvider.get();
     }
 
     @Override
@@ -620,16 +629,19 @@ public final class DaggerTerminalitApp_HiltComponents_SingletonC {
       @Override
       public T get() {
         switch (id) {
-          case 0: // com.terminalit.data.ProfileStore 
-          return (T) new ProfileStore(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), singletonCImpl.provideGsonProvider.get());
+          case 0: // com.terminalit.data.ExtraKeyStore 
+          return (T) new ExtraKeyStore(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), singletonCImpl.provideGsonProvider.get());
 
           case 1: // com.google.gson.Gson 
           return (T) AppModule_ProvideGsonFactory.provideGson();
 
-          case 2: // com.terminalit.repository.SessionRepository 
+          case 2: // com.terminalit.data.ProfileStore 
+          return (T) new ProfileStore(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule), singletonCImpl.provideGsonProvider.get());
+
+          case 3: // com.terminalit.repository.SessionRepository 
           return (T) new SessionRepository(singletonCImpl.hostKeyStoreProvider.get());
 
-          case 3: // com.terminalit.data.HostKeyStore 
+          case 4: // com.terminalit.data.HostKeyStore 
           return (T) new HostKeyStore(ApplicationContextModule_ProvideContextFactory.provideContext(singletonCImpl.applicationContextModule));
 
           default: throw new AssertionError(id);
